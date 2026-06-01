@@ -26,4 +26,5 @@ public record DocumentacaoTecnicaResponse(
                 documentacaoTecnica.getDataCriacao(),
                 documentacaoTecnica.getDataAtualizacao());
     }
+
 }
