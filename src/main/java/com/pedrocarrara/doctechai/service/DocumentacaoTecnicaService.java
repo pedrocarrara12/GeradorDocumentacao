@@ -7,6 +7,7 @@ import com.pedrocarrara.doctechai.entity.DocumentacaoTecnica;
 import com.pedrocarrara.doctechai.exception.DocumentacaoNaoEncontradaException;
 import com.pedrocarrara.doctechai.repository.DocumentacaoTecnicaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class DocumentacaoTecnicaService {
     public DocumentacaoTecnicaService(DocumentacaoTecnicaRepository documentacaoTecnicaRepository) {
         this.documentacaoTecnicaRepository = documentacaoTecnicaRepository;
     }
-
+    @Transactional
     public DocumentacaoTecnicaResponse criarDocumentacaoTecnica(
             DocumentacaoTecnicaCreateRequest documentacaoTecnicaCreateRequest) {
         DocumentacaoTecnica documentacaoTecnica = new DocumentacaoTecnica(
@@ -31,18 +32,18 @@ public class DocumentacaoTecnicaService {
         DocumentacaoTecnica documentacaoSalva = documentacaoTecnicaRepository.save(documentacaoTecnica);
         return new DocumentacaoTecnicaResponse(documentacaoSalva);
     }
-
+    @Transactional(readOnly = true)
     public List<DocumentacaoTecnicaResponse> listarDocumentacaoTecnicas() {
         return documentacaoTecnicaRepository.findAll()
                 .stream()
                 .map(DocumentacaoTecnicaResponse::new)
                 .toList();
     }
-
+    @Transactional(readOnly = true)
     public DocumentacaoTecnicaResponse buscarDocumentacaoTecnicaPorId(Long id) {
         return new DocumentacaoTecnicaResponse(buscarEntidadePorId(id));
     }
-
+    @Transactional
     public DocumentacaoTecnicaResponse atualizar(
             Long id,
             DocumentacaoTecnicaUpdateRequest request) {
@@ -56,12 +57,11 @@ public class DocumentacaoTecnicaService {
         DocumentacaoTecnica documentacaoAtualizada = documentacaoTecnicaRepository.save(documentacaoTecnica);
         return new DocumentacaoTecnicaResponse(documentacaoAtualizada);
     }
-
+    @Transactional
     public void excluirDocumentacaoTecnica(Long id) {
         DocumentacaoTecnica documentacaoTecnica = buscarEntidadePorId(id);
         documentacaoTecnicaRepository.delete(documentacaoTecnica);
     }
-
     private DocumentacaoTecnica buscarEntidadePorId(Long id) {
         return documentacaoTecnicaRepository.findById(id)
                 .orElseThrow(() -> new DocumentacaoNaoEncontradaException(
