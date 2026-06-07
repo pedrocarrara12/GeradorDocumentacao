@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DocTech AI</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="hero">
+    <div>
+        <p class="eyebrow">Gerador de Documentacao Tecnica com IA</p>
+        <h1>DocTech AI</h1>
+        <p>Cadastre codigos, gere documentacao tecnica com IA e exporte em PDF.</p>
+    </div>
+</header>
+
+<main class="layout">
+    <section class="card">
+        <div class="section-title">
+            <h2>Gerar documentacao</h2>
+            <span>POST /documentacoes</span>
+        </div>
+
+        <form id="create-form" class="form-grid">
+            <label>
+                Titulo
+                <input id="create-titulo" maxlength="100" required placeholder="Procedure de cadastro de cliente" />
+            </label>
+
+            <label>
+                Tipo do codigo
+                <select id="create-tipoCodigo" required></select>
+            </label>
+
+            <label>
+                Linguagem
+                <select id="create-linguagem" required></select>
+            </label>
+
+            <label class="full">
+                Codigo-fonte
+                <textarea id="create-codigoFonte" required rows="8" placeholder="Cole aqui o codigo que sera documentado"></textarea>
+            </label>
+
+            <button type="submit">Gerar e salvar</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <div class="section-title">
+            <h2>Buscar por ID</h2>
+            <span>GET /documentacoes/{id}</span>
+        </div>
+
+        <form id="search-form" class="inline-form">
+            <input id="search-id" type="number" min="1" required placeholder="ID" />
+            <button type="submit">Buscar</button>
+        </form>
+    </section>
+
+    <section class="card full-width">
+        <div class="section-title">
+            <h2>Documentacoes cadastradas</h2>
+            <span>GET /documentacoes</span>
+        </div>
+
+        <div class="actions-row">
+            <button id="reload-button" type="button">Recarregar lista</button>
+            <button id="clear-selection-button" type="button" class="secondary">Limpar selecao</button>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Titulo</th>
+                    <th>Tipo</th>
+                    <th>Linguagem</th>
+                    <th>Atualizacao</th>
+                    <th>Acoes</th>
+                </tr>
+                </thead>
+                <tbody id="documentacoes-body">
+                <tr>
+                    <td colspan="6">Nenhuma documentacao carregada.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="section-title">
+            <h2>Editar documentacao</h2>
+            <span>PUT /documentacoes/{id}</span>
+        </div>
+
+        <form id="update-form" class="form-grid">
+            <label>
+                ID
+                <input id="update-id" type="number" min="1" readonly />
+            </label>
+
+            <label>
+                Titulo
+                <input id="update-titulo" maxlength="100" required />
+            </label>
+
+            <label>
+                Tipo do codigo
+                <select id="update-tipoCodigo" required></select>
+            </label>
+
+            <label>
+                Linguagem
+                <select id="update-linguagem" required></select>
+            </label>
+
+            <label class="full">
+                Codigo-fonte
+                <textarea id="update-codigoFonte" required rows="7"></textarea>
+            </label>
+
+            <button type="submit">Salvar alteracoes</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <div class="section-title">
+            <h2>Exportar PDF</h2>
+            <span>POST /api/documentacoes/pdf</span>
+        </div>
+
+        <form id="pdf-form" class="form-grid">
+            <label>
+                Titulo
+                <input id="pdf-titulo" maxlength="150" required />
+            </label>
+
+            <label>
+                Autor
+                <input id="pdf-autor" maxlength="100" required placeholder="Seu nome" />
+            </label>
+
+            <label class="full">
+                Descricao do sistema
+                <textarea id="pdf-descricao" required rows="4"></textarea>
+            </label>
+
+            <label class="full">
+                Conteudo gerado pela IA
+                <textarea id="pdf-conteudo" required rows="8"></textarea>
+            </label>
+
+            <button type="submit">Baixar PDF</button>
+        </form>
+    </section>
+
+    <section class="card full-width">
+        <div class="section-title">
+            <h2>Visualizacao</h2>
+            <span>Resposta selecionada</span>
+        </div>
+
+        <div id="details" class="details">
+            <p>Selecione uma documentacao para visualizar os detalhes.</p>
+        </div>
+    </section>
+</main>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

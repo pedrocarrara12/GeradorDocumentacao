@@ -30,4 +30,14 @@ public class GlobalExceptionHandler {
                 erro -> new ErroCampoResponse(erro.getField(), erro.getDefaultMessage())).toList();
         return new ErroResponse(HttpStatus.BAD_REQUEST.value(), LocalDateTime.now(), errors);
     }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(PdfGenerationException.class)
+    public ErroResponse handlePdfGeneration(PdfGenerationException ex) {
+        return new ErroResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                LocalDateTime.now(),
+                List.of(new ErroCampoResponse("pdf", ex.getMessage()))
+        );
+    }
 }

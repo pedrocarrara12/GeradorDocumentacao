@@ -1,5 +1,6 @@
 package com.pedrocarrara.doctechai.service;
 
+import com.pedrocarrara.doctechai.client.GeminiClient;
 import com.pedrocarrara.doctechai.dto.DocumentacaoTecnicaCreateRequest;
 import com.pedrocarrara.doctechai.dto.DocumentacaoTecnicaResponse;
 import com.pedrocarrara.doctechai.dto.DocumentacaoTecnicaUpdateRequest;
@@ -15,19 +16,29 @@ import java.util.List;
 public class DocumentacaoTecnicaService {
 
     private final DocumentacaoTecnicaRepository documentacaoTecnicaRepository;
+    private final GeminiClient geminiClient;
+    private final DocumentacaoPromptService documentacaoPromptService;
 
-    public DocumentacaoTecnicaService(DocumentacaoTecnicaRepository documentacaoTecnicaRepository) {
+    public DocumentacaoTecnicaService(
+            DocumentacaoTecnicaRepository documentacaoTecnicaRepository,
+            GeminiClient geminiClient,
+            DocumentacaoPromptService documentacaoPromptService) {
         this.documentacaoTecnicaRepository = documentacaoTecnicaRepository;
+        this.geminiClient = geminiClient;
+        this.documentacaoPromptService = documentacaoPromptService;
     }
     @Transactional
     public DocumentacaoTecnicaResponse criarDocumentacaoTecnica(
             DocumentacaoTecnicaCreateRequest documentacaoTecnicaCreateRequest) {
+        String prompt = documentacaoPromptService.criarPromptParaGeracao(documentacaoTecnicaCreateRequest);
+        String documentacaoGerada = geminiClient.gerarConteudo(prompt);
+
         DocumentacaoTecnica documentacaoTecnica = new DocumentacaoTecnica(
                 documentacaoTecnicaCreateRequest.titulo(),
                 documentacaoTecnicaCreateRequest.tipoCodigo(),
                 documentacaoTecnicaCreateRequest.linguagem(),
                 documentacaoTecnicaCreateRequest.codigoFonte(),
-                null
+                documentacaoGerada
         );
         DocumentacaoTecnica documentacaoSalva = documentacaoTecnicaRepository.save(documentacaoTecnica);
         return new DocumentacaoTecnicaResponse(documentacaoSalva);

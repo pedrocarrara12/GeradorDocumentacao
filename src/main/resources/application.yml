@@ -17,3 +17,9 @@ spring:
 
 server:
   port: ${SERVER_PORT:8080}
+
+gemini:
+  api:
+    base-url: ${GEMINI_API_BASE_URL:https://generativelanguage.googleapis.com}
+    key: ${GEMINI_API_KEY:}
+    model: ${GEMINI_MODEL:gemini-2.5-flash}
